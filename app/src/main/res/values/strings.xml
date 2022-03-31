@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">socketio-chat-demo</string>
+
+    <string name="goto_settings">You must approve this permission in Permissions in the app settings on your device to continue using the app.</string>
+    <string name="settings">Settings</string>
 </resources>

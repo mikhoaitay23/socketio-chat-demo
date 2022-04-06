@@ -3,11 +3,35 @@
 
     <data>
 
+        <variable
+            name="viewModel"
+            type="com.example.socketio_chat_demo.ui.home.HomeViewModel" />
     </data>
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="8dp">
 
+        <androidx.appcompat.widget.AppCompatEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/username"
+            android:text="@={viewModel.userNameLiveData}" />
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/name_room"
+            android:text="@={viewModel.nameRoomLiveData}" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="@{()->viewModel.startChat()}"
+            android:text="@string/login"
+            android:textAllCaps="false" />
     </androidx.appcompat.widget.LinearLayoutCompat>
 </layout>

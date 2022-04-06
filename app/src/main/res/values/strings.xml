@@ -3,4 +3,14 @@
 
     <string name="goto_settings">You must approve this permission in Permissions in the app settings on your device to continue using the app.</string>
     <string name="settings">Settings</string>
+    
+    //Home
+    <string name="username">Username</string>
+    <string name="name_room">Name room</string>
+    <string name="login">Login</string>
+    <string name="empty_input">Empty input</string>
+
+    //Chat
+    <string name="enter_message">Enter message</string>
+    <string name="send">Send</string>
 </resources>

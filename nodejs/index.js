@@ -1,12 +1,9 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-
-
 const socketIo = require('socket.io')()
 var app = express();
 
 app.use(bodyParser.urlencoded({ extended: true }));
-
 app.use(bodyParser.json());
 
 
@@ -19,11 +16,9 @@ var ip = require('ip');
 console.log(ip.address());
 
 //Chat Server
-
 var io = socketIo.listen(server);
 
 io.on('connection',function(socket) {
-
     //The moment one of your client connected to socket.io server it will obtain socket id
     //Let's print this out.
     console.log(`Connection : SocketId = ${socket.id}`)

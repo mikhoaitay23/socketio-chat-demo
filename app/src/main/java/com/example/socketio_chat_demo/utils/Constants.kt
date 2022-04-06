@@ -13,4 +13,6 @@ object Constants {
     const val UPDATE_CHAT = "updateChat"
     const val USER_LEFT = "userLeftChatRoom"
     const val NEW_MESSAGE = "newMessage"
+    const val TYPING = "typing"
+    const val STOP_TYPING = "stopTyping"
 }

@@ -56,6 +56,18 @@ class ChatViewModel(val application: Application, private val room: Room) : View
         }
     }
 
+    private var onTyping = Emitter.Listener {
+        viewModelScope.launch {
+
+        }
+    }
+
+    private var onStopTyping = Emitter.Listener {
+        viewModelScope.launch {
+
+        }
+    }
+
     init {
         try {
             mSocket = IO.socket(Constants.SOCKET_SERVER_URL)
@@ -66,6 +78,8 @@ class ChatViewModel(val application: Application, private val room: Room) : View
         mSocket!!.on(Constants.NEW_USER, onNewUser)
         mSocket!!.on(Constants.UPDATE_CHAT, onUpdateChat)
         mSocket!!.on(Constants.USER_LEFT, onUserLeft)
+        mSocket!!.on(Constants.TYPING, onTyping)
+        mSocket!!.on(Constants.STOP_TYPING, onStopTyping)
         mSocket!!.connect()
     }
 

@@ -1,19 +1,14 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const socketIo = require('socket.io')()
+const socketIo = require('socket.io')();
+const fs = require('fs');
 var app = express();
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 
-var server = app.listen(3000,()=>{
-    console.log('Server is running on port number 3000')
-})
-
-var ip = require('ip');
-
-console.log(ip.address());
+var server = app.listen(3000);
 
 //Chat Server
 var io = socketIo.listen(server);
@@ -41,7 +36,7 @@ io.on('connection',function(socket) {
         //TODO: need to chose
         //io.to : User who has joined can get a event;
         //socket.broadcast.to : all the users except the user who has joined will get the message
-        // socket.broadcast.to(`${roomName}`).emit('newUserToChatRoom',userName);
+        //socket.broadcast.to(`${roomName}`).emit('newUserToChatRoom',userName);
         io.to(`${roomName}`).emit('newUserToChatRoom',userName);
 
     })
@@ -76,16 +71,15 @@ io.on('connection',function(socket) {
     })
 
     //If you want to add typing function you can make it like this.
-    
-    // socket.on('typing',function(roomNumber){ //Only roomNumber is needed here
-    //     console.log('typing triggered')
-    //     socket.broadcast.to(`${roomNumber}`).emit('typing')
-    // })
+    socket.on('typing',function(roomNumber){ //Only roomNumber is needed here
+        console.log('typing triggered')
+        socket.broadcast.to(`${roomNumber}`).emit('typing')
+    })
 
-    // socket.on('stopTyping',function(roomNumber){ //Only roomNumber is needed here
-    //     console.log('stopTyping triggered')
-    //     socket.broadcast.to(`${roomNumber}`).emit('stopTyping')
-    // })
+    socket.on('stopTyping',function(roomNumber){ //Only roomNumber is needed here
+        console.log('stopTyping triggered')
+        socket.broadcast.to(`${roomNumber}`).emit('stopTyping')
+    })
 
     socket.on('disconnect', function () {
         console.log("One of sockets disconnected from our server.")

@@ -7,11 +7,10 @@ var app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-
 var server = app.listen(3000);
-
-//Chat Server
 var io = socketIo.listen(server);
+
+var listUser = [];
 
 io.on('connection',function(socket) {
     //The moment one of your client connected to socket.io server it will obtain socket id
@@ -19,6 +18,38 @@ io.on('connection',function(socket) {
     console.log(`Connection : SocketId = ${socket.id}`)
     //Since we are going to use userName through whole socket connection, Let's make it global.   
     var userName = '';
+
+    fs.readFile('./users.json', 'utf8', (err, data) => {
+        if (err) {
+            console.log(`Error reading file from disk: ${err}`);
+        } else {
+            listUser = JSON.parse(data)
+            console.log(listUser)
+        }
+    });
+
+    socket.on('signup', function(data){
+        const userData = JSON.parse(data)
+        if(listUser.indexOf(data) > -1){
+            console.log(exist)
+        } else {
+            listUser.push(userData)
+            fs.writeFile('./users.json', JSON.stringify(listUser),
+            {
+              encoding: "utf8",
+              flag: "w",
+              mode: 0o666
+            },
+            (err) => {
+              if (err)
+                console.log(err);
+              else {
+                console.log("File written successfully\n");
+                console.log("The written has the following contents:");
+              }
+          });
+        }
+    })
     
     socket.on('subscribe', function(data) {
         console.log('subscribe trigged')
@@ -29,7 +60,6 @@ io.on('connection',function(socket) {
         socket.join(`${roomName}`)
         console.log(`Username : ${userName} joined Room Name : ${roomName}`)
         
-       
         // Let the other user get notification that user got into the room;
         // It can be use to indicate that person has read the messages. (Like turns "unread" into "read")
 
@@ -71,12 +101,12 @@ io.on('connection',function(socket) {
     })
 
     //If you want to add typing function you can make it like this.
-    socket.on('typing',function(roomNumber){ //Only roomNumber is needed here
+    socket.on('typing',function(roomNumber){
         console.log('typing triggered')
         socket.broadcast.to(`${roomNumber}`).emit('typing')
     })
 
-    socket.on('stopTyping',function(roomNumber){ //Only roomNumber is needed here
+    socket.on('stopTyping',function(roomNumber){
         console.log('stopTyping triggered')
         socket.broadcast.to(`${roomNumber}`).emit('stopTyping')
     })

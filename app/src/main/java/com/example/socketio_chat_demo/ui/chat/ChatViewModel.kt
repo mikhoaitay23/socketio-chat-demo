@@ -1,6 +1,8 @@
 package com.example.socketio_chat_demo.ui.chat
 
 import android.app.Application
+import android.text.Editable
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -10,12 +12,12 @@ import com.example.socketio_chat_demo.data.model.Room
 import com.example.socketio_chat_demo.data.model.SendMessage
 import com.example.socketio_chat_demo.data.response.DataResponse
 import com.example.socketio_chat_demo.utils.Constants
+import com.example.socketio_chat_demo.utils.SocketHandler
 import com.google.gson.Gson
 import io.socket.client.IO
 import io.socket.client.Socket
 import io.socket.emitter.Emitter
 import kotlinx.coroutines.launch
-import java.lang.Exception
 
 class ChatViewModel(val application: Application, private val room: Room) : ViewModel() {
 
@@ -40,7 +42,7 @@ class ChatViewModel(val application: Application, private val room: Room) : View
         }
     }
 
-    private var onUpdateChat = Emitter.Listener {
+    private val onUpdateChat = Emitter.Listener {
         viewModelScope.launch {
             val message: Message = gson.fromJson(it[0].toString(), Message::class.java)
             message.type = 1
@@ -48,7 +50,7 @@ class ChatViewModel(val application: Application, private val room: Room) : View
         }
     }
 
-    private var onUserLeft = Emitter.Listener {
+    private val onUserLeft = Emitter.Listener {
         viewModelScope.launch {
             val leftUserName = it[0] as String
             val message = Message(leftUserName, "", "", 3)
@@ -56,24 +58,21 @@ class ChatViewModel(val application: Application, private val room: Room) : View
         }
     }
 
-    private var onTyping = Emitter.Listener {
+    private val onTyping = Emitter.Listener {
         viewModelScope.launch {
-
+            Log.d("TAG", ": haha")
         }
     }
 
-    private var onStopTyping = Emitter.Listener {
+    private val onStopTyping = Emitter.Listener {
         viewModelScope.launch {
-
+            Log.d("TAG", ": hoho")
         }
     }
 
     init {
-        try {
-            mSocket = IO.socket(Constants.SOCKET_SERVER_URL)
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
+        SocketHandler.setSocket()
+        mSocket = SocketHandler.getSocket()
         mSocket!!.on(Socket.EVENT_CONNECT, onConnect)
         mSocket!!.on(Constants.NEW_USER, onNewUser)
         mSocket!!.on(Constants.UPDATE_CHAT, onUpdateChat)
@@ -97,6 +96,13 @@ class ChatViewModel(val application: Application, private val room: Room) : View
                 typeMessageLiveData.value = ""
             }
         }
+    }
+
+    fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+        if (count > 0)
+            mSocket!!.emit(Constants.TYPING, room.roomName)
+        else
+            mSocket!!.emit(Constants.STOP_TYPING, room.roomName)
     }
 
     fun onDisconnectSocket() {

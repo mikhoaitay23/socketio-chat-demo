@@ -3,6 +3,9 @@
 
     <string name="goto_settings">You must approve this permission in Permissions in the app settings on your device to continue using the app.</string>
     <string name="settings">Settings</string>
+
+    //Signup
+    <string name="sign_up">Sign up</string>
     
     //Home
     <string name="username">Username</string>

@@ -8,13 +8,12 @@ import com.example.socketio_chat_demo.databinding.ItemRcChatBinding
 
 class ChatAdapter : RecyclerView.Adapter<ChatAdapter.ChatViewHolder>() {
 
-    val listMessage= mutableListOf<Message>()
+    val listMessage = mutableListOf<Message>()
 
-    fun addMessage(message: Message){
+    fun addMessage(message: Message) {
         listMessage.add(message)
         notifyItemInserted(listMessage.size)
     }
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChatAdapter.ChatViewHolder {
         val binding =
@@ -33,5 +32,10 @@ class ChatAdapter : RecyclerView.Adapter<ChatAdapter.ChatViewHolder>() {
         fun bind(position: Int) {
             binding.messageModel = listMessage[position]
         }
+    }
+
+    companion object {
+        private const val VIEW_TYPE_USER_MY_MESSAGE = 10
+        private const val VIEW_TYPE_USER_OTHER_MESSAGE = 11
     }
 }

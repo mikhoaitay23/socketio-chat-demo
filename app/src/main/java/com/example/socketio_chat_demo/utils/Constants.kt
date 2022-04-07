@@ -15,4 +15,5 @@ object Constants {
     const val NEW_MESSAGE = "newMessage"
     const val TYPING = "typing"
     const val STOP_TYPING = "stopTyping"
+    const val SIGN_UP = "signup"
 }

@@ -20,34 +20,6 @@ class HomeViewModel(val application: Application) : ViewModel() {
 
     }
 
-    fun startChat() {
-        viewModelScope.launch {
-            val validateType = validate()
-            if (validateType == Constants.ValidateType.ValidateDone) {
-                loginLiveData.value = DataResponse.DataSuccessResponse(
-                    Room(
-                        userNameLiveData.value!!,
-                        nameRoomLiveData.value!!
-                    )
-                )
-            } else {
-                loginLiveData.value = DataResponse.DataSuccessResponse(null)
-            }
-        }
-    }
-
-    private fun validate(): Constants.ValidateType {
-        return when {
-            userNameLiveData.value == null -> {
-                Constants.ValidateType.EmptyUserName
-            }
-            nameRoomLiveData.value == null -> {
-                Constants.ValidateType.EmptyNameRoom
-            }
-            else -> Constants.ValidateType.ValidateDone
-        }
-    }
-
     class Factory(private val application: Application) :
         ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {

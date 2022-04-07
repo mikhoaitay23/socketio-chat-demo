@@ -17,7 +17,7 @@ class SplashFragment : BaseFragment<FragmentSplashBinding>() {
 
     override fun initViewModel() {
         Handler(Looper.getMainLooper()).postDelayed({
-            findNavController().navigate(R.id.action_global_homeFragment)
+            findNavController().navigate(R.id.action_global_loginFragment)
         }, SPLASH_DELAY)
     }
 

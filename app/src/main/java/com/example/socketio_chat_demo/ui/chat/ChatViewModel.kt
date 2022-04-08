@@ -1,7 +1,6 @@
 package com.example.socketio_chat_demo.ui.chat
 
 import android.app.Application
-import android.text.Editable
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -10,16 +9,16 @@ import androidx.lifecycle.viewModelScope
 import com.example.socketio_chat_demo.data.model.Message
 import com.example.socketio_chat_demo.data.model.Room
 import com.example.socketio_chat_demo.data.model.SendMessage
+import com.example.socketio_chat_demo.data.model.User
 import com.example.socketio_chat_demo.data.response.DataResponse
 import com.example.socketio_chat_demo.utils.Constants
 import com.example.socketio_chat_demo.utils.SocketHandler
 import com.google.gson.Gson
-import io.socket.client.IO
 import io.socket.client.Socket
 import io.socket.emitter.Emitter
 import kotlinx.coroutines.launch
 
-class ChatViewModel(val application: Application, private val room: Room) : ViewModel() {
+class ChatViewModel(val application: Application, private val user: User) : ViewModel() {
 
     private var mSocket: Socket? = null
     private val gson = Gson()

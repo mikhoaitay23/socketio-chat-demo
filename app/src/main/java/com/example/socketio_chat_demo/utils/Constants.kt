@@ -16,4 +16,9 @@ object Constants {
     const val TYPING = "typing"
     const val STOP_TYPING = "stopTyping"
     const val SIGN_UP = "signup"
+    const val ON_SIGN_UP = "on_sign_up"
+    const val LOGIN = "login"
+    const val ON_LOGIN = "on_login"
+    const val MEMBERS = "members"
+    const val GET_MEMBERS = "get_members"
 }

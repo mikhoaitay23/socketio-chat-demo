@@ -27,7 +27,11 @@
         android:id="@+id/homeFragment"
         android:name="com.example.socketio_chat_demo.ui.home.HomeFragment"
         android:label="HomeFragment"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home">
+        <argument
+            android:name="username"
+            app:argType="string" />
+    </fragment>
 
     <fragment
         android:id="@+id/chatFragment"
@@ -35,8 +39,8 @@
         android:label="ChatFragment"
         tools:layout="@layout/fragment_chat">
         <argument
-            android:name="currentRoom"
-            app:argType="com.example.socketio_chat_demo.data.model.Room" />
+            android:name="userReceiver"
+            app:argType="com.example.socketio_chat_demo.data.model.User" />
     </fragment>
 
     <action

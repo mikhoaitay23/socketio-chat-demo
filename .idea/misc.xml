@@ -10,6 +10,7 @@
         <entry key="..\:/android/socketio-chat-demo/app/src/main/res/layout/fragment_sign_up.xml" value="0.36666666666666664" />
         <entry key="..\:/android/socketio-chat-demo/app/src/main/res/layout/fragment_splash.xml" value="0.36666666666666664" />
         <entry key="..\:/android/socketio-chat-demo/app/src/main/res/layout/item_rc_chat.xml" value="0.36666666666666664" />
+        <entry key="..\:/android/socketio-chat-demo/app/src/main/res/layout/item_rc_members.xml" value="0.36666666666666664" />
         <entry key="..\:/android/socketio-chat-demo/app/src/main/res/layout/item_rc_message_me.xml" value="0.36666666666666664" />
         <entry key="..\:/android/socketio-chat-demo/app/src/main/res/layout/item_rc_message_other.xml" value="0.36666666666666664" />
       </map>

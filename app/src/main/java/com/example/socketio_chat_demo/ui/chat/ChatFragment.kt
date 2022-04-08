@@ -23,7 +23,7 @@ class ChatFragment : BasePermissionRequestFragment<FragmentChatBinding>() {
     }
 
     override fun initViewModel() {
-        val factory = ChatViewModel.Factory(requireActivity().application, args.currentRoom)
+        val factory = ChatViewModel.Factory(requireActivity().application, args.userReceiver)
         viewModel = ViewModelProvider(this, factory)[ChatViewModel::class.java]
 
         viewModel.messageLiveData.observe(this) {

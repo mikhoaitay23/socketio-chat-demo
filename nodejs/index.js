@@ -10,7 +10,6 @@ app.use(bodyParser.json());
 var server = app.listen(3000);
 var io = socketIo.listen(server);
 
-var listUser = [];
 
 io.on('connection',function(socket) {
     //The moment one of your client connected to socket.io server it will obtain socket id
@@ -18,20 +17,20 @@ io.on('connection',function(socket) {
     console.log(`Connection : SocketId = ${socket.id}`)
     //Since we are going to use userName through whole socket connection, Let's make it global.   
     var userName = '';
+    var listUser = [];
 
     fs.readFile('./users.json', 'utf8', (err, data) => {
         if (err) {
             console.log(`Error reading file from disk: ${err}`);
         } else {
             listUser = JSON.parse(data)
-            console.log(listUser)
         }
     });
 
     socket.on('signup', function(data){
         const userData = JSON.parse(data)
-        if(listUser.indexOf(data) > -1){
-            console.log(exist)
+        if(listUser.filter(x => x.username === userData.username).length > 0){
+
         } else {
             listUser.push(userData)
             fs.writeFile('./users.json', JSON.stringify(listUser),
@@ -41,14 +40,30 @@ io.on('connection',function(socket) {
               mode: 0o666
             },
             (err) => {
-              if (err)
+              if (err){
                 console.log(err);
+                io.emit('on_sign_up', false);
+              }
               else {
+                io.emit('on_sign_up', true);
                 console.log("File written successfully\n");
                 console.log("The written has the following contents:");
               }
           });
         }
+    })
+
+    socket.on('login', function(data){
+        const userData = JSON.parse(data)
+        if(listUser.filter(user => user.username === userData.username).length > 0){
+            io.emit('on_login', userData.username)
+        } else {
+            io.emit('on_login', "")
+        }
+    })
+
+    socket.on('members', function(){
+        io.emit('get_members', listUser)
     })
     
     socket.on('subscribe', function(data) {

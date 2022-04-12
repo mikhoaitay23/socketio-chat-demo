@@ -5,10 +5,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.example.socketio_chat_demo.data.model.SendMessage
 import com.example.socketio_chat_demo.data.model.User
 import com.example.socketio_chat_demo.data.response.DataResponse
 import com.example.socketio_chat_demo.utils.Constants
+import com.example.socketio_chat_demo.utils.SharedPreferenceUtils
 import com.example.socketio_chat_demo.utils.SocketHandler
 import com.google.gson.Gson
 import io.socket.client.Socket
@@ -26,6 +26,7 @@ class LoginViewModel(private val application: Application) : ViewModel() {
         viewModelScope.launch {
             val username = it[0] as String
             mLoginLiveData.value = DataResponse.DataSuccessResponse(username)
+            SharedPreferenceUtils.setCurrentUserId(application, username)
         }
     }
 

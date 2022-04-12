@@ -4,4 +4,4 @@ import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-data class Room (var userName: String, var roomName: String): Parcelable
+data class Room (var sender: String, var receiver: String): Parcelable

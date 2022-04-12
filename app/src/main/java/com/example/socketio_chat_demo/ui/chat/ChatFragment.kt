@@ -26,14 +26,14 @@ class ChatFragment : BasePermissionRequestFragment<FragmentChatBinding>() {
         val factory = ChatViewModel.Factory(requireActivity().application, args.userReceiver)
         viewModel = ViewModelProvider(this, factory)[ChatViewModel::class.java]
 
-        viewModel.messageLiveData.observe(this) {
+        viewModel.messagesLiveData.observe(this) {
             val result = (it as DataResponse.DataSuccessResponse).body
-            chatAdapter.addMessage(result)
+            chatAdapter.addMessages(result)
         }
     }
 
     private fun initRecycler() {
-        chatAdapter = ChatAdapter()
+        chatAdapter = ChatAdapter(requireContext())
         binding!!.rcChat.adapter = chatAdapter
     }
 

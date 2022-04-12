@@ -2,17 +2,16 @@ package com.example.socketio_chat_demo.ui.home
 
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import com.example.socketio_chat_demo.R
 import com.example.socketio_chat_demo.base.basefragment.BaseFragment
 import com.example.socketio_chat_demo.data.model.User
 import com.example.socketio_chat_demo.data.response.DataResponse
 import com.example.socketio_chat_demo.databinding.FragmentHomeBinding
 import com.example.socketio_chat_demo.ui.home.adapter.HomeAdapter
+import com.example.socketio_chat_demo.utils.SharedPreferenceUtils
 
 class HomeFragment : BaseFragment<FragmentHomeBinding>() {
 
-    private val args: HomeFragmentArgs by navArgs()
     private lateinit var viewModel: HomeViewModel
     private lateinit var mHomeAdapter: HomeAdapter
 
@@ -24,7 +23,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     }
 
     override fun initViewModel() {
-        val factory = HomeViewModel.Factory(requireActivity().application, args.username)
+        val factory = HomeViewModel.Factory(
+            requireActivity().application,
+            SharedPreferenceUtils.getCurrentUserId(requireContext())!!
+        )
         viewModel = ViewModelProvider(this, factory)[HomeViewModel::class.java]
 
         viewModel.membersLiveData.observe(this) {
@@ -35,11 +37,16 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.getMembers()
+    }
+
     private fun initRecycler() {
         mHomeAdapter = HomeAdapter()
         binding!!.rcMembers.adapter = mHomeAdapter
         mHomeAdapter.setListener(object : HomeAdapter.OnClickListener {
-            override fun OnClickUserListener(user: User) {
+            override fun onClickUserListener(user: User) {
                 val action = HomeFragmentDirections.actionGlobalChatFragment(user)
                 findNavController().navigate(action)
             }

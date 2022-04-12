@@ -8,6 +8,8 @@ import android.os.Build
 import android.os.Environment
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import java.text.SimpleDateFormat
+import java.util.*
 
 object Utils {
 
@@ -55,5 +57,10 @@ object Utils {
                         ) == PackageManager.PERMISSION_GRANTED)
             }
         }
+    }
+
+    fun formatTime(timeInMillis: Long): String? {
+        val dateFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
+        return dateFormat.format(timeInMillis)
     }
 }

@@ -4,6 +4,9 @@
 
     <data>
 
+        <variable
+            name="messageModel"
+            type="com.example.socketio_chat_demo.data.model.Message" />
     </data>
 
     <RelativeLayout
@@ -31,7 +34,7 @@
                     <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/tvChatMessage"
                         style="@style/TextViewChatContent"
-                        android:text="Hi, how are you today?"
+                        android:text="@{messageModel.message}"
                         android:textColor="@color/black" />
 
                     <androidx.appcompat.widget.AppCompatTextView
@@ -49,7 +52,8 @@
                         android:id="@+id/mLayoutUrlPreview"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:visibility="gone">
 
                         <View
                             android:layout_width="match_parent"
@@ -95,7 +99,7 @@
                 style="@style/TextViewChatTime"
                 android:layout_alignBottom="@id/cvChatMessage"
                 android:layout_toEndOf="@id/cvChatMessage"
-                android:text="21:27" />
+                android:setTime="@{messageModel.createdAt}" />
 
         </RelativeLayout>
     </RelativeLayout>

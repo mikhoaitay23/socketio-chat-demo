@@ -6,6 +6,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.socketio_chat_demo.R
 import com.example.socketio_chat_demo.base.basefragment.BaseFragment
 import com.example.socketio_chat_demo.databinding.FragmentSplashBinding
+import com.example.socketio_chat_demo.utils.SharedPreferenceUtils
 
 class SplashFragment : BaseFragment<FragmentSplashBinding>() {
 

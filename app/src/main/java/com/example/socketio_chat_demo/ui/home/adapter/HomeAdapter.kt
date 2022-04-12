@@ -13,7 +13,7 @@ class HomeAdapter : RecyclerView.Adapter<HomeAdapter.HomeViewHolder>() {
 
     fun addUsers(users: MutableList<User>) {
         listUser.addAll(users)
-        notifyItemRangeInserted(0, listUser.size)
+        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeViewHolder {
@@ -34,7 +34,7 @@ class HomeAdapter : RecyclerView.Adapter<HomeAdapter.HomeViewHolder>() {
             val user = listUser[position]
             binding.tvUsername.text = user.username
             binding.root.setOnClickListener {
-                mOnClickListener?.OnClickUserListener(user)
+                mOnClickListener?.onClickUserListener(user)
             }
         }
     }
@@ -44,6 +44,6 @@ class HomeAdapter : RecyclerView.Adapter<HomeAdapter.HomeViewHolder>() {
     }
 
     interface OnClickListener {
-        fun OnClickUserListener(user: User)
+        fun onClickUserListener(user: User)
     }
 }

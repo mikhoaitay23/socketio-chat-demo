@@ -29,7 +29,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>() {
         viewModel.mLoginLiveData.observe(this) {
             val result = (it as DataResponse.DataSuccessResponse).body
             if (result != "") {
-                val action = LoginFragmentDirections.actionGlobalHomeFragment(result)
+                val action = LoginFragmentDirections.actionGlobalHomeFragment()
                 findNavController().navigate(action)
             } else {
                 Toast.makeText(

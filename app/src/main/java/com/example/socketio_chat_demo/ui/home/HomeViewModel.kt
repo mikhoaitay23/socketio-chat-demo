@@ -19,7 +19,7 @@ import kotlinx.coroutines.launch
 import org.json.JSONArray
 
 
-class HomeViewModel(val application: Application, val username: String) : ViewModel() {
+class HomeViewModel(val application: Application, private val username: String) : ViewModel() {
 
     private var mSocket: Socket? = null
     var membersLiveData = MutableLiveData<DataResponse<MutableList<User>>>()
@@ -41,10 +41,13 @@ class HomeViewModel(val application: Application, val username: String) : ViewMo
     init {
         mSocket = SocketHandler.getSocket()
         mSocket!!.on(Constants.GET_MEMBERS, onGetMembers)
+    }
+
+    fun getMembers(){
         mSocket!!.emit(Constants.MEMBERS)
     }
 
-    class Factory(private val application: Application, val username: String) :
+    class Factory(private val application: Application, private val username: String) :
         ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(HomeViewModel::class.java)) {

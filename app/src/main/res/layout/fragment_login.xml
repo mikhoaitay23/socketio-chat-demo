@@ -21,20 +21,18 @@
             android:hint="@string/username"
             android:text="@={viewModel.usernameLiveData}" />
 
+        <androidx.appcompat.widget.AppCompatEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/name_room"
+            android:text="@={viewModel.nameRoomLiveData}" />
+
         <androidx.appcompat.widget.AppCompatButton
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="@{()->viewModel.onLogin()}"
             android:text="@string/login"
             android:textAllCaps="false" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tvSignUp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="8dp"
-            android:text="@string/sign_up"
-            android:textColor="@color/black" />
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 </layout>

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -27,7 +26,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="8dp">
+            android:paddingVertical="8dp">
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/btnUpload"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_gravity="bottom"
+                android:background="?attr/selectableItemBackground"
+                app:srcCompat="@drawable/ic_add"
+                app:tint="@color/black" />
 
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/edtMsg"

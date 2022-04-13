@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.socketio_chat_demo.data.model.Message
 import com.example.socketio_chat_demo.databinding.ItemRcMessageMeBinding
 import com.example.socketio_chat_demo.databinding.ItemRcMessageOtherBinding
+import com.example.socketio_chat_demo.databinding.ItemRcMessageTypingBinding
 import com.example.socketio_chat_demo.utils.SharedPreferenceUtils
 
 class ChatAdapter(private val context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -19,8 +20,13 @@ class ChatAdapter(private val context: Context) : RecyclerView.Adapter<RecyclerV
     }
 
     fun addSingleMessage(message: Message) {
-        listMessage.add(0, message)
+        listMessage.add(listMessage.size, message)
         notifyItemInserted(listMessage.indexOf(message))
+    }
+
+    fun removeMessageTyping() {
+        listMessage.removeAt(listMessage.size - 2)
+        notifyItemRemoved(listMessage.size - 2)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -34,7 +40,7 @@ class ChatAdapter(private val context: Context) : RecyclerView.Adapter<RecyclerV
                     )
                 MessageMeViewHolder(binding)
             }
-            else -> {
+            VIEW_TYPE_USER_OTHER_MESSAGE -> {
                 val binding =
                     ItemRcMessageOtherBinding.inflate(
                         LayoutInflater.from(parent.context),
@@ -43,6 +49,14 @@ class ChatAdapter(private val context: Context) : RecyclerView.Adapter<RecyclerV
                     )
                 MessageOtherViewHolder(binding)
             }
+            else -> {
+                val binding = ItemRcMessageTypingBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                )
+                MessageOtherTypingViewHolder(binding)
+            }
         }
     }
 
@@ -50,6 +64,7 @@ class ChatAdapter(private val context: Context) : RecyclerView.Adapter<RecyclerV
         when (holder.itemViewType) {
             VIEW_TYPE_USER_MY_MESSAGE -> (holder as MessageMeViewHolder).bind(position)
             VIEW_TYPE_USER_OTHER_MESSAGE -> (holder as MessageOtherViewHolder).bind(position)
+            VIEW_TYPE_USER_OTHER_TYPING -> (holder as MessageOtherTypingViewHolder).bind()
         }
     }
 
@@ -58,13 +73,17 @@ class ChatAdapter(private val context: Context) : RecyclerView.Adapter<RecyclerV
     override fun getItemViewType(position: Int): Int {
         val message = listMessage[position]
         var isMyMessage = false
-        if (message.sender == SharedPreferenceUtils.getCurrentUserId(context)) {
+        if (message.userName == SharedPreferenceUtils.getCurrentUserId(context)) {
             isMyMessage = true
         }
-        return if (isMyMessage) {
-            VIEW_TYPE_USER_MY_MESSAGE
+        return if (message.type == "text") {
+            if (isMyMessage) {
+                VIEW_TYPE_USER_MY_MESSAGE
+            } else {
+                VIEW_TYPE_USER_OTHER_MESSAGE
+            }
         } else {
-            VIEW_TYPE_USER_OTHER_MESSAGE
+            VIEW_TYPE_USER_OTHER_TYPING
         }
     }
 
@@ -82,8 +101,16 @@ class ChatAdapter(private val context: Context) : RecyclerView.Adapter<RecyclerV
         }
     }
 
+    inner class MessageOtherTypingViewHolder(private val binding: ItemRcMessageTypingBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        fun bind() {
+
+        }
+    }
+
     companion object {
         private const val VIEW_TYPE_USER_MY_MESSAGE = 10
         private const val VIEW_TYPE_USER_OTHER_MESSAGE = 11
+        private const val VIEW_TYPE_USER_OTHER_TYPING = 33
     }
 }

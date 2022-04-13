@@ -4,35 +4,23 @@
 
     <data>
 
-        <variable
-            name="messageModel"
-            type="com.example.socketio_chat_demo.data.model.Message" />
     </data>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:clickable="true"
-        android:focusable="true"
         android:paddingStart="8dp">
-
-        <View
-            android:id="@+id/mViewChatPadding"
-            android:layout_width="match_parent"
-            android:layout_height="12dp"
-            android:layout_alignParentTop="true" />
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/mViewChatPadding">
+            android:layout_height="wrap_content">
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cvChatMessage"
                 style="@style/CardViewChat"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentEnd="true"
-                app:cardBackgroundColor="@color/design_default_color_primary">
+                android:layout_alignWithParentIfMissing="true"
+                android:layout_marginTop="8dp"
+                app:cardBackgroundColor="@color/bg_chat_bubble_other">
 
                 <androidx.appcompat.widget.LinearLayoutCompat
                     android:id="@+id/mLayoutChatContainer"
@@ -43,14 +31,14 @@
                     <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/tvChatMessage"
                         style="@style/TextViewChatContent"
-                        android:text="@{messageModel.messageContent}"
-                        android:textColor="@color/white" />
+                        android:text="@string/typing"
+                        android:textColor="@color/black" />
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/tvEdited"
                         style="@style/TextViewChatEdited"
                         android:text="(edited)"
-                        android:textColor="#d8ceff"
+                        android:textColor="#828282"
                         android:visibility="gone" />
 
                     <View
@@ -77,26 +65,25 @@
                             android:id="@+id/tvUrlPreviewSiteName"
                             style="@style/TextViewPreviewSiteName"
                             android:text="\@Reddit"
-                            android:textColor="@color/white" />
+                            android:textColor="@color/black" />
 
                         <androidx.appcompat.widget.AppCompatTextView
                             android:id="@+id/tvUrlPreviewTitle"
                             style="@style/TextViewPreviewTitle"
                             android:text="Title will be here."
-                            android:textColor="@color/white" />
+                            android:textColor="@color/black" />
 
                         <androidx.appcompat.widget.AppCompatTextView
                             android:id="@+id/tvUrlPreviewDescription"
                             style="@style/TextViewPreviewDescription"
                             android:text="Description will be here. Blah Blah WWW Blah Wl Blah W WW WW ABCD EFG WW WW WW W Third Line. WWW Z XCVB QWER"
-                            android:textColor="@color/white" />
+                            android:textColor="@color/black" />
 
                         <androidx.appcompat.widget.AppCompatImageView
                             android:id="@+id/imgUrlPreviewMain"
                             android:layout_width="match_parent"
                             android:layout_height="148dp"
                             android:adjustViewBounds="true"
-                            android:maxWidth="260dp"
                             android:scaleType="centerCrop" />
 
                     </androidx.appcompat.widget.LinearLayoutCompat>
@@ -104,20 +91,12 @@
 
             </androidx.cardview.widget.CardView>
 
-<!--            <androidx.appcompat.widget.AppCompatTextView-->
-<!--                android:id="@+id/tvChatTime"-->
-<!--                style="@style/TextViewChatTime"-->
-<!--                android:layout_alignBottom="@id/cvChatMessage"-->
-<!--                android:layout_toStartOf="@id/cvChatMessage"-->
-<!--                android:setTime="@{messageModel.createdAt}" />-->
-
-<!--            <androidx.appcompat.widget.AppCompatImageView-->
-<!--                android:id="@+id/imgStatus"-->
-<!--                android:layout_width="24dp"-->
-<!--                android:layout_height="24dp"-->
-<!--                android:layout_above="@id/tvChatTime"-->
-<!--                android:layout_alignStart="@id/tvChatTime"-->
-<!--                android:layout_alignEnd="@id/tvChatTime" />-->
+            <!--            <androidx.appcompat.widget.AppCompatTextView-->
+            <!--                android:id="@+id/tvChatTime"-->
+            <!--                style="@style/TextViewChatTime"-->
+            <!--                android:layout_alignBottom="@id/cvChatMessage"-->
+            <!--                android:layout_toEndOf="@id/cvChatMessage"-->
+            <!--                android:setTime="@{messageModel.createdAt}" />-->
 
         </RelativeLayout>
     </RelativeLayout>

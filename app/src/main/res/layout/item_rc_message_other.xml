@@ -34,7 +34,7 @@
                     <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/tvChatMessage"
                         style="@style/TextViewChatContent"
-                        android:text="@{messageModel.message}"
+                        android:text="@{messageModel.messageContent}"
                         android:textColor="@color/black" />
 
                     <androidx.appcompat.widget.AppCompatTextView
@@ -94,12 +94,12 @@
 
             </androidx.cardview.widget.CardView>
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/tvChatTime"
-                style="@style/TextViewChatTime"
-                android:layout_alignBottom="@id/cvChatMessage"
-                android:layout_toEndOf="@id/cvChatMessage"
-                android:setTime="@{messageModel.createdAt}" />
+<!--            <androidx.appcompat.widget.AppCompatTextView-->
+<!--                android:id="@+id/tvChatTime"-->
+<!--                style="@style/TextViewChatTime"-->
+<!--                android:layout_alignBottom="@id/cvChatMessage"-->
+<!--                android:layout_toEndOf="@id/cvChatMessage"-->
+<!--                android:setTime="@{messageModel.createdAt}" />-->
 
         </RelativeLayout>
     </RelativeLayout>

@@ -15,9 +15,6 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>() {
     override fun getLayoutID() = R.layout.fragment_login
 
     override fun initView() {
-        binding!!.tvSignUp.setOnClickListener {
-            findNavController().navigate(R.id.action_global_signUpFragment)
-        }
 
         binding!!.viewModel = viewModel
     }
@@ -28,8 +25,8 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>() {
 
         viewModel.mLoginLiveData.observe(this) {
             val result = (it as DataResponse.DataSuccessResponse).body
-            if (result != "") {
-                val action = LoginFragmentDirections.actionGlobalHomeFragment()
+            if (result != null) {
+                val action = LoginFragmentDirections.actionGlobalChatFragment(result)
                 findNavController().navigate(action)
             } else {
                 Toast.makeText(

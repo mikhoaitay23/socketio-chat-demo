@@ -16,16 +16,8 @@ io.on('connection', function (socket) {
     //Let's print this out.
     console.log(`Connection : SocketId = ${socket.id}`)
     //Since we are going to use userName through whole socket connection, Let's make it global.   
-    var listUser = [];
     var listMessage = [];
-
-    fs.readFile('./users.json', 'utf8', (err, data) => {
-        if (err) {
-            console.log(`Error reading file from disk: ${err}`);
-        } else {
-            listUser = JSON.parse(data)
-        }
-    });
+    var count = 0;
 
     fs.readFile('./histories.json', 'utf8', (err, data) => {
         if (err) {
@@ -35,65 +27,13 @@ io.on('connection', function (socket) {
         }
     });
 
-    socket.on('signup', function (data) {
-        const userData = JSON.parse(data)
-        if (listUser.filter(x => x.username === userData.username).length > 0) {
-
-        } else {
-            listUser.push(userData)
-            fs.writeFile('./users.json', JSON.stringify(listUser),
-                {
-                    encoding: "utf8",
-                    flag: "w",
-                    mode: 0o666
-                },
-                (err) => {
-                    if (err) {
-                        console.log(err);
-                        io.emit('on_sign_up', false);
-                    }
-                    else {
-                        io.emit('on_sign_up', true);
-                        console.log("File written successfully\n");
-                        console.log("The written has the following contents:");
-                    }
-                });
-        }
-    })
-
-    socket.on('login', function (data) {
-        const userData = JSON.parse(data)
-        if (listUser.filter(user => user.username === userData.username).length > 0) {
-            io.emit('on_login', userData.username)
-        } else {
-            io.emit('on_login', "")
-        }
-    })
-
-    socket.on('members', function () {
-        io.emit('get_members', listUser)
-    })
-
     socket.on('subscribe', function (data) {
         console.log('subscribe trigged')
         const room_data = JSON.parse(data)
-        const sender = room_data.sender;
-        const receiver = room_data.receiver;
+        const roomName = room_data.roomName;
         console.log(room_data)
-        if (listMessage.filter(x => (x.sender === sender && x.receiver === receiver) || (x.sender === receiver && x.receiver === sender)).length > 0) {
-            socket.join(`${receiver}`)
-            console.log(`Username : ${sender} joined Room Name : ${receiver}`)
-            // Let the other user get notification that user got into the room;
-            // It can be use to indicate that person has read the messages. (Like turns "unread" into "read")
-
-            //TODO: need to chose
-            //io.to : User who has joined can get a event;
-            //socket.broadcast.to : all the users except the user who has joined will get the message
-            //socket.broadcast.to(`${roomName}`).emit('newUserToChatRoom',userName);
-            io.emit('userWithChatHistory', listMessage);
-        } else {
-            io.to(`${receiver}`).emit('userWithChatHistory', '')
-        }
+        socket.join(`${roomName}`)
+        io.to(`${roomName}`).emit('userWithChatHistory', listMessage);
     })
 
     socket.on('unsubscribe', function (data) {
@@ -103,7 +43,7 @@ io.on('connection', function (socket) {
         const roomName = room_data.roomName;
 
         console.log(`Username : ${userName} leaved Room Name : ${roomName}`)
-        socket.broadcast.to(`${roomName}`).emit('userLeftChatRoom', userName)
+        socket.to(`${roomName}`).emit('userLeftChatRoom', userName)
         socket.leave(`${roomName}`)
     })
 
@@ -121,21 +61,39 @@ io.on('connection', function (socket) {
                     console.log(err);
                 }
                 else {
-                    socket.broadcast.to(`${messageData.receiver}`).emit('updateChat', JSON.stringify(messageData)) // Need to be parsed into Kotlin object in Kotlin
+                    const message = {
+                        userName: messageData.userName,
+                        messageContent: messageData.messageContent,
+                        roomName: messageData.roomName,
+                        type: messageData.type
+                    }
+                    io.to(`${messageData.roomName}`).emit('updateChat', JSON.stringify(message))
                 }
             });
     })
 
     //If you want to add typing function you can make it like this.
     socket.on('typing', function (roomNumber) {
-        console.log('typing triggered')
-        socket.broadcast.to(`${roomNumber}`).emit('typing')
+        if (count === 0) {
+            count++
+            socket.to(`${roomNumber}`).emit('typing')
+        }
     })
 
     socket.on('stopTyping', function (roomNumber) {
-        console.log('stopTyping triggered')
-        socket.broadcast.to(`${roomNumber}`).emit('stopTyping')
+        count = 0
+        socket.to(`${roomNumber}`).emit('stopTyping')
     })
+
+    socket.on("image", function (image) {
+        console.log(" image réçu : " + image)
+        image = image.replace(/^data:image\/png;base64,/, "");
+
+        fs.writeFile("out.png", image, 'base64', function (err) {
+            console.log(err);
+        });
+
+    });
 
     socket.on('disconnect', function () {
         console.log("One of sockets disconnected from our server.")

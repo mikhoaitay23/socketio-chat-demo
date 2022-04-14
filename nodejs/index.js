@@ -72,7 +72,6 @@ io.on('connection', function (socket) {
             });
     })
 
-    //If you want to add typing function you can make it like this.
     socket.on('typing', function (roomNumber) {
         if (count === 0) {
             count++

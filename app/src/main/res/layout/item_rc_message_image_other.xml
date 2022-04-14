@@ -1,0 +1,56 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="messageModel"
+            type="com.example.socketio_chat_demo.data.model.Message" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cvChatMessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="4dp"
+                app:cardBackgroundColor="@color/cardview_light_background"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="0dp"
+                app:cardPreventCornerOverlap="false"
+                app:cardUseCompatPadding="true">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/imgImageFile"
+                    android:layout_width="228dp"
+                    android:layout_height="148dp"
+                    android:adjustViewBounds="true"
+                    android:scaleType="centerCrop"
+                    android:setImage="@{messageModel.messageContent}" />
+
+            </androidx.cardview.widget.CardView>
+
+            <!--            <TextView-->
+            <!--                android:id="@+id/tvChatTime"-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_alignBottom="@id/cvChatMessage"-->
+            <!--                android:layout_marginBottom="8dp"-->
+            <!--                android:layout_toEndOf="@id/cvChatMessage"-->
+            <!--                android:text="21:27"-->
+            <!--                android:textColor="#8e8e8e"-->
+            <!--                android:textSize="10dp" />-->
+
+        </RelativeLayout>
+    </RelativeLayout>
+</layout>

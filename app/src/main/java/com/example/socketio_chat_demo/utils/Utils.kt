@@ -4,12 +4,16 @@ import android.Manifest
 import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
+import android.database.Cursor
+import android.net.Uri
 import android.os.Build
 import android.os.Environment
+import android.provider.MediaStore
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import java.text.SimpleDateFormat
 import java.util.*
+
 
 object Utils {
 
@@ -62,5 +66,19 @@ object Utils {
     fun formatTime(timeInMillis: Long): String? {
         val dateFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
         return dateFormat.format(timeInMillis)
+    }
+
+    fun getRealPathFromURI(context: Context, uri: Uri): String {
+        val result: String
+        val cursor: Cursor? = context.contentResolver.query(uri, null, null, null, null)
+        if (cursor == null) {
+            result = uri.path.toString()
+        } else {
+            cursor.moveToFirst()
+            val idx: Int = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA)
+            result = cursor.getString(idx)
+            cursor.close()
+        }
+        return result
     }
 }

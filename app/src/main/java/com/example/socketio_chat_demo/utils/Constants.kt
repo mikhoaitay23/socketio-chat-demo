@@ -15,4 +15,7 @@ object Constants {
     const val TYPING = "typing"
     const val STOP_TYPING = "stopTyping"
     const val UPLOAD_IMAGE = "uploadImage"
+
+    const val TEXT_TYPE = "text"
+    const val IMAGE_TYPE = "image"
 }

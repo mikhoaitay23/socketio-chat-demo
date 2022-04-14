@@ -2,22 +2,18 @@ package com.example.socketio_chat_demo.ui.chat
 
 import android.app.Activity
 import android.content.Intent
-import android.util.Base64
 import android.view.View
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.net.toFile
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
 import com.example.socketio_chat_demo.R
 import com.example.socketio_chat_demo.base.basefragment.BasePermissionRequestFragment
-import com.example.socketio_chat_demo.data.model.Message
 import com.example.socketio_chat_demo.data.response.DataResponse
 import com.example.socketio_chat_demo.databinding.FragmentChatBinding
 import com.example.socketio_chat_demo.ui.chat.adapter.ChatAdapter
 import com.example.socketio_chat_demo.utils.Utils
 import java.io.File
-import java.io.FileInputStream
 
 class ChatFragment : BasePermissionRequestFragment<FragmentChatBinding>(), View.OnClickListener {
 
@@ -96,7 +92,7 @@ class ChatFragment : BasePermissionRequestFragment<FragmentChatBinding>(), View.
             if (result.resultCode == Activity.RESULT_OK) {
                 val intent = result.data
                 if (intent != null) {
-                    val file = File(intent.data!!.toString())
+                    val file = File(Utils.getRealPathFromURI(requireContext(), intent.data!!))
                     viewModel.onUploadImage(file)
                 }
             }

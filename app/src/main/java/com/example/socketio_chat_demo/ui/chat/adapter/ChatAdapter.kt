@@ -5,9 +5,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.socketio_chat_demo.data.model.Message
-import com.example.socketio_chat_demo.databinding.ItemRcMessageMeBinding
-import com.example.socketio_chat_demo.databinding.ItemRcMessageOtherBinding
-import com.example.socketio_chat_demo.databinding.ItemRcMessageTypingBinding
+import com.example.socketio_chat_demo.databinding.*
+import com.example.socketio_chat_demo.utils.Constants
 import com.example.socketio_chat_demo.utils.SharedPreferenceUtils
 
 class ChatAdapter(private val context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -49,6 +48,22 @@ class ChatAdapter(private val context: Context) : RecyclerView.Adapter<RecyclerV
                     )
                 MessageOtherViewHolder(binding)
             }
+            VIEW_TYPE_USER_MY_IMAGE_MESSAGE -> {
+                val binding = ItemRcMessageImageMeBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                )
+                MessageImageMeViewHolder(binding)
+            }
+            VIEW_TYPE_USER_OTHER_IMAGE_MESSAGE -> {
+                val binding = ItemRcMessageImageOtherBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                )
+                MessageImageOtherViewHolder(binding)
+            }
             else -> {
                 val binding = ItemRcMessageTypingBinding.inflate(
                     LayoutInflater.from(parent.context),
@@ -64,6 +79,10 @@ class ChatAdapter(private val context: Context) : RecyclerView.Adapter<RecyclerV
         when (holder.itemViewType) {
             VIEW_TYPE_USER_MY_MESSAGE -> (holder as MessageMeViewHolder).bind(position)
             VIEW_TYPE_USER_OTHER_MESSAGE -> (holder as MessageOtherViewHolder).bind(position)
+            VIEW_TYPE_USER_MY_IMAGE_MESSAGE -> (holder as MessageImageMeViewHolder).bind(position)
+            VIEW_TYPE_USER_OTHER_IMAGE_MESSAGE -> (holder as MessageImageOtherViewHolder).bind(
+                position
+            )
             VIEW_TYPE_USER_OTHER_TYPING -> (holder as MessageOtherTypingViewHolder).bind()
         }
     }
@@ -76,11 +95,17 @@ class ChatAdapter(private val context: Context) : RecyclerView.Adapter<RecyclerV
         if (message.userName == SharedPreferenceUtils.getCurrentUserId(context)) {
             isMyMessage = true
         }
-        return if (message.type == "text") {
+        return if (message.type == Constants.TEXT_TYPE) {
             if (isMyMessage) {
                 VIEW_TYPE_USER_MY_MESSAGE
             } else {
                 VIEW_TYPE_USER_OTHER_MESSAGE
+            }
+        } else if (message.type == Constants.IMAGE_TYPE) {
+            if (isMyMessage) {
+                VIEW_TYPE_USER_MY_IMAGE_MESSAGE
+            } else {
+                VIEW_TYPE_USER_OTHER_IMAGE_MESSAGE
             }
         } else {
             VIEW_TYPE_USER_OTHER_TYPING
@@ -101,6 +126,20 @@ class ChatAdapter(private val context: Context) : RecyclerView.Adapter<RecyclerV
         }
     }
 
+    inner class MessageImageMeViewHolder(private val binding: ItemRcMessageImageMeBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        fun bind(position: Int) {
+            binding.messageModel = listMessage[position]
+        }
+    }
+
+    inner class MessageImageOtherViewHolder(private val binding: ItemRcMessageImageOtherBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        fun bind(position: Int) {
+            binding.messageModel = listMessage[position]
+        }
+    }
+
     inner class MessageOtherTypingViewHolder(private val binding: ItemRcMessageTypingBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind() {
@@ -111,6 +150,8 @@ class ChatAdapter(private val context: Context) : RecyclerView.Adapter<RecyclerV
     companion object {
         private const val VIEW_TYPE_USER_MY_MESSAGE = 10
         private const val VIEW_TYPE_USER_OTHER_MESSAGE = 11
+        private const val VIEW_TYPE_USER_MY_IMAGE_MESSAGE = 12
+        private const val VIEW_TYPE_USER_OTHER_IMAGE_MESSAGE = 13
         private const val VIEW_TYPE_USER_OTHER_TYPING = 33
     }
 }

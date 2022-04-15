@@ -16,5 +16,12 @@
     //Chat
     <string name="enter_message">Enter message</string>
     <string name="send">Send</string>
-    <string name="typing">Typing…</string>
+    <string name="typing">User is typing…</string>
+    <string name="image_mimetype">image/mpeg</string>
+    <string name="video_mimetype">video/mp4</string>
+    <string name="audio_mimetype">audio/mpeg</string>
+    <string name="text">text</string>
+    <string name="image">image</string>
+    <string name="video">video</string>
+    <string name="audio">audio</string>
 </resources>

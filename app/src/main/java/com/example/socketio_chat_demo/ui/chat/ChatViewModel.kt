@@ -2,10 +2,7 @@ package com.example.socketio_chat_demo.ui.chat
 
 import android.app.Application
 import android.util.Base64
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.example.socketio_chat_demo.data.model.Message
 import com.example.socketio_chat_demo.data.model.Room
 import com.example.socketio_chat_demo.data.response.DataResponse
@@ -105,18 +102,32 @@ class ChatViewModel(private val application: Application, private val room: Room
             mSocket!!.emit(Constants.STOP_TYPING, room.roomName)
     }
 
-    fun onDisconnectSocket() {
-        val jsonData = Gson().toJson(room)
-        mSocket!!.emit(Constants.UNSUBSCRIBE, jsonData)
-        mSocket!!.disconnect()
-    }
-
-    fun onUploadImage(file: File) {
+    fun onUploadMedia(file: File, type: String) {
         val fis = FileInputStream(file)
         val imgByte = ByteArray(file.length().toInt())
         fis.read(imgByte)
         val encodedString = Base64.encodeToString(imgByte, Base64.URL_SAFE)
-        mSocket!!.emit(Constants.UPLOAD_IMAGE, encodedString)
+
+        val sendData =
+            Message(
+                room.userName,
+                encodedString,
+                room.roomName,
+                type
+            )
+        val jsonData = gson.toJson(sendData)
+
+        mSocket!!.emit(Constants.UPLOAD_IMAGE, jsonData)
+    }
+
+    fun onDisconnectSocket() {
+//        val jsonData = Gson().toJson(room)
+//        mSocket!!.emit(Constants.UNSUBSCRIBE, jsonData)
+//        mSocket!!.disconnect()
+    }
+
+    val isTyping: LiveData<Boolean> = Transformations.map(messageTypingLiveData){
+        (it as DataResponse.DataSuccessResponse).body.messageContent == "on typing"
     }
 
     private fun validate(): Constants.ValidateType {

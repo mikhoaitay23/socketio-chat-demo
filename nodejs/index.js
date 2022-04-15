@@ -84,17 +84,49 @@ io.on('connection', function (socket) {
         socket.to(`${roomNumber}`).emit('stopTyping')
     })
 
-    socket.on("image", function (image) {
-        console.log(" image réçu : " + image)
-        image = image.replace(/^data:image\/png;base64,/, "");
-
-        fs.writeFile("out.png", image, 'base64', function (err) {
-            console.log(err);
+    socket.on("uploadImage", function (data) {
+        var current = new Date();
+        const messageData = JSON.parse(data)
+        image = messageData.messageContent.replace(/^data:image\/png;base64,/, "");
+        var mimeType = '';
+        if (messageData.type === 'image') {
+            mimeType = '.png'
+        } else if (messageData.type === 'video') {
+            mimeType = '.mp4'
+        } else {
+            mimeType = '.mp3'
+        }
+        fs.writeFile('socket_' + current.getSeconds() + current.getMinutes() + current.getTime() + current.getDay() + mimeType, image, 'base64', function (err) {
+            if (err) {
+                console.log(err)
+            } else {
+                listMessage.push(messageData)
+                fs.writeFile('./histories.json', JSON.stringify(listMessage),
+                    {
+                        encoding: "utf8",
+                        flag: "w",
+                        mode: 0o666
+                    },
+                    (err) => {
+                        if (err) {
+                            console.log(err);
+                        }
+                        else {
+                            const message = {
+                                userName: messageData.userName,
+                                messageContent: messageData.messageContent,
+                                roomName: messageData.roomName,
+                                type: messageData.type
+                            }
+                            io.to(`${messageData.roomName}`).emit('updateChat', JSON.stringify(message))
+                        }
+                    });
+            }
         });
 
     });
 
-    socket.on('disconnect', function () {
-        console.log("One of sockets disconnected from our server.")
-    });
+    // socket.on('disconnect', function () {
+    //     console.log("One of sockets disconnected from our server.")
+    // });
 })

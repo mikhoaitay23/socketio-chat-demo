@@ -3,6 +3,7 @@ package com.example.socketio_chat_demo.ui.chat
 import android.app.Application
 import android.util.Base64
 import androidx.lifecycle.*
+import com.example.socketio_chat_demo.data.model.LoadDataStatus
 import com.example.socketio_chat_demo.data.model.Message
 import com.example.socketio_chat_demo.data.model.Room
 import com.example.socketio_chat_demo.data.response.DataResponse
@@ -62,7 +63,7 @@ class ChatViewModel(private val application: Application, private val room: Room
     private val onStopTyping = Emitter.Listener {
         viewModelScope.launch {
             val message = Message(room.userName, "stop typing", room.roomName, "typing")
-            messageTypingLiveData.value = DataResponse.DataSuccessResponse(message)
+            messageTypingLiveData.value = DataResponse.DataErrorResponse()
         }
     }
 
@@ -75,6 +76,7 @@ class ChatViewModel(private val application: Application, private val room: Room
         mSocket!!.on(Constants.STOP_TYPING, onStopTyping)
         mSocket!!.on(Constants.UPDATE_CHAT, onUpdateChat)
         mSocket!!.connect()
+        messageTypingLiveData.value = DataResponse.DataEmptyResponse()
     }
 
     fun onSendMessage() {
@@ -116,8 +118,7 @@ class ChatViewModel(private val application: Application, private val room: Room
                 type
             )
         val jsonData = gson.toJson(sendData)
-
-        mSocket!!.emit(Constants.UPLOAD_IMAGE, jsonData)
+        mSocket!!.emit(Constants.UPLOAD_MEDIA, jsonData)
     }
 
     fun onDisconnectSocket() {
@@ -127,7 +128,7 @@ class ChatViewModel(private val application: Application, private val room: Room
     }
 
     val isTyping: LiveData<Boolean> = Transformations.map(messageTypingLiveData){
-        (it as DataResponse.DataSuccessResponse).body.messageContent == "on typing"
+        it.loadDataStatus == LoadDataStatus.SUCCESS
     }
 
     private fun validate(): Constants.ValidateType {

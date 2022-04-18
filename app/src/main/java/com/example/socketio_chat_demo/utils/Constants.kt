@@ -14,7 +14,7 @@ object Constants {
     const val NEW_MESSAGE = "newMessage"
     const val TYPING = "typing"
     const val STOP_TYPING = "stopTyping"
-    const val UPLOAD_IMAGE = "uploadImage"
+    const val UPLOAD_MEDIA = "uploadMedia"
 
     const val TEXT_TYPE = "text"
     const val IMAGE_TYPE = "image"

@@ -21,7 +21,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        mSocket!!.disconnect()
+//        mSocket!!.disconnect()
         SharedPreferenceUtils.setCurrentUserId(this, "")
     }
 }

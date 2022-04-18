@@ -215,14 +215,20 @@ class ChatAdapter(private val context: Context) : RecyclerView.Adapter<RecyclerV
     inner class MessageAudioMeViewHolder(private val binding: ItemRcMessageAudioMeBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(position: Int) {
-
+            val message = listMessage[position]
+            binding.btnPlay.setOnClickListener {
+                mOnClickListener?.onAudioClick(message)
+            }
         }
     }
 
     inner class MessageAudioOtherViewHolder(private val binding: ItemRcMessageAudioOtherBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(position: Int) {
-
+            val message = listMessage[position]
+            binding.btnPlay.setOnClickListener {
+                mOnClickListener?.onAudioClick(message)
+            }
         }
     }
 

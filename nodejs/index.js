@@ -84,10 +84,11 @@ io.on('connection', function (socket) {
         socket.to(`${roomNumber}`).emit('stopTyping')
     })
 
-    socket.on("uploadImage", function (data) {
+    socket.on("uploadMedia", function (data) {
         var current = new Date();
         const messageData = JSON.parse(data)
         image = messageData.messageContent.replace(/^data:image\/png;base64,/, "");
+        console.log(messageData);
         var mimeType = '';
         if (messageData.type === 'image') {
             mimeType = '.png'

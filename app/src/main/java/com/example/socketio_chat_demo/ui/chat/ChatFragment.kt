@@ -16,6 +16,7 @@ import com.example.socketio_chat_demo.data.response.DataResponse
 import com.example.socketio_chat_demo.databinding.FragmentChatBinding
 import com.example.socketio_chat_demo.ui.chat.adapter.ChatAdapter
 import com.example.socketio_chat_demo.utils.ExoPlayerUtils
+import com.example.socketio_chat_demo.utils.MediaPlayerUtils
 import com.example.socketio_chat_demo.utils.Utils
 import com.google.android.exoplayer2.ui.PlayerView
 import java.io.File
@@ -27,6 +28,9 @@ class ChatFragment : BasePermissionRequestFragment<FragmentChatBinding>(), View.
     private lateinit var chatAdapter: ChatAdapter
     private val mExoPlayerUtils: ExoPlayerUtils by lazy {
         ExoPlayerUtils()
+    }
+    private val mMediaPlayerUtils: MediaPlayerUtils by lazy {
+        MediaPlayerUtils()
     }
 
     override fun getLayoutID() = R.layout.fragment_chat
@@ -61,13 +65,17 @@ class ChatFragment : BasePermissionRequestFragment<FragmentChatBinding>(), View.
         binding!!.rcChat.adapter = chatAdapter
         chatAdapter.setListener(object : ChatAdapter.OnClickListener {
             override fun onVideoClick(playerView: PlayerView, message: Message) {
-                val path = Utils.getMedia(requireContext(), message.messageContent, "video")
-                Log.d("TAG", "onVideoClick: ${path!!}")
-//                mExoPlayerUtils.initPlayer(requireContext(), playerView, path!!.absolutePath)
+                val file = Utils.getMedia(requireContext(), message.messageContent, getString(R.string.video))
+                mExoPlayerUtils.initPlayer(requireContext(), playerView, Uri.fromFile(file).toString())
             }
 
             override fun onAudioClick(message: Message) {
-
+                if (mMediaPlayerUtils.isPlaying()){
+                    mMediaPlayerUtils.onPause()
+                } else {
+                    val file = Utils.getMedia(requireContext(), message.messageContent, getString(R.string.audio))
+                    mMediaPlayerUtils.onPlay(Uri.fromFile(file).toString())
+                }
             }
 
         })

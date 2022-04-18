@@ -8,6 +8,7 @@ import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.ui.PlayerView
 import com.google.android.exoplayer2.upstream.DataSource
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSource
+import com.google.android.exoplayer2.upstream.FileDataSource
 
 class ExoPlayerUtils {
 
@@ -35,7 +36,7 @@ class ExoPlayerUtils {
     }
 
     private fun buildMediaSource(url: String): MediaSource {
-        val dataSourceFactory: DataSource.Factory = DefaultHttpDataSource.Factory()
+        val dataSourceFactory: DataSource.Factory = FileDataSource.Factory()
         return ProgressiveMediaSource.Factory(dataSourceFactory)
             .createMediaSource(MediaItem.fromUri(url))
     }

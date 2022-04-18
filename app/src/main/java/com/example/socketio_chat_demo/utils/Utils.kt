@@ -164,8 +164,17 @@ object Utils {
             data,
             Base64.URL_SAFE
         )
-        val file = File.createTempFile(mimeType, null, context.cacheDir)
-        Log.d("TAG", "getMedia: $file")
+        val file = File.createTempFile(mimeType, when (mimeType) {
+            "video" -> {
+                ".mp4"
+            }
+            "audio" -> {
+                ".mp3"
+            }
+            else -> {
+                ""
+            }
+        }, context.cacheDir)
         val fileOutputStream: FileOutputStream
         try {
             fileOutputStream = FileOutputStream(file)

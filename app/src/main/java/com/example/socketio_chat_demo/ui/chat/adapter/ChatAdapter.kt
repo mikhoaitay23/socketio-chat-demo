@@ -1,20 +1,31 @@
 package com.example.socketio_chat_demo.ui.chat.adapter
 
 import android.content.Context
+import android.media.MediaPlayer
+import android.net.Uri
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SeekBar
 import androidx.recyclerview.widget.RecyclerView
 import com.example.socketio_chat_demo.R
 import com.example.socketio_chat_demo.data.model.Message
 import com.example.socketio_chat_demo.databinding.*
+import com.example.socketio_chat_demo.utils.MediaPlayerUtils
 import com.example.socketio_chat_demo.utils.SharedPreferenceUtils
+import com.example.socketio_chat_demo.utils.Utils
 import com.google.android.exoplayer2.ui.PlayerView
 
 class ChatAdapter(private val context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     val listMessage = mutableListOf<Message>()
     private var mOnClickListener: OnClickListener? = null
+    private var mMediaPlayerUtils = MediaPlayerUtils()
+
+    init {
+        mMediaPlayerUtils = MediaPlayerUtils()
+    }
 
     fun addMessages(messages: MutableList<Message>) {
         listMessage.addAll(messages)
@@ -217,8 +228,38 @@ class ChatAdapter(private val context: Context) : RecyclerView.Adapter<RecyclerV
         fun bind(position: Int) {
             val message = listMessage[position]
             binding.btnPlay.setOnClickListener {
-                mOnClickListener?.onAudioClick(message)
+                if (mMediaPlayerUtils.isPlaying()) {
+                    mMediaPlayerUtils.onPause()
+                    binding.btnPlay.setImageResource(R.drawable.ic_play)
+                } else {
+                    val file = Utils.getMedia(
+                        context,
+                        message.messageContent,
+                        context.getString(R.string.audio)
+                    )
+                    mMediaPlayerUtils.onPlay(Uri.fromFile(file).toString())
+                    initializeSeekbar(binding.mPlayerView, mMediaPlayerUtils.getMediaPlayer()!!)
+                    mMediaPlayerUtils.getMediaPlayer()!!.setOnCompletionListener {
+                        binding.btnPlay.setImageResource(R.drawable.ic_play)
+                    }
+                    binding.btnPlay.setImageResource(R.drawable.ic_pause)
+                }
             }
+            binding.mPlayerView.setOnSeekBarChangeListener(object :
+                SeekBar.OnSeekBarChangeListener {
+                override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
+                    if (p2) {
+                        mMediaPlayerUtils.getMediaPlayer()?.seekTo(p1)
+                    }
+                }
+
+                override fun onStartTrackingTouch(p0: SeekBar?) {
+                }
+
+                override fun onStopTrackingTouch(p0: SeekBar?) {
+                }
+
+            })
         }
     }
 
@@ -227,8 +268,38 @@ class ChatAdapter(private val context: Context) : RecyclerView.Adapter<RecyclerV
         fun bind(position: Int) {
             val message = listMessage[position]
             binding.btnPlay.setOnClickListener {
-                mOnClickListener?.onAudioClick(message)
+                if (mMediaPlayerUtils.isPlaying()) {
+                    mMediaPlayerUtils.onPause()
+                    binding.btnPlay.setImageResource(R.drawable.ic_play)
+                } else {
+                    val file = Utils.getMedia(
+                        context,
+                        message.messageContent,
+                        context.getString(R.string.audio)
+                    )
+                    mMediaPlayerUtils.onPlay(Uri.fromFile(file).toString())
+                    initializeSeekbar(binding.mPlayerView, mMediaPlayerUtils.getMediaPlayer()!!)
+                    mMediaPlayerUtils.getMediaPlayer()!!.setOnCompletionListener {
+                        binding.btnPlay.setImageResource(R.drawable.ic_play)
+                    }
+                    binding.btnPlay.setImageResource(R.drawable.ic_pause)
+                }
             }
+            binding.mPlayerView.setOnSeekBarChangeListener(object :
+                SeekBar.OnSeekBarChangeListener {
+                override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
+                    if (p2) {
+                        mMediaPlayerUtils.getMediaPlayer()?.seekTo(p1)
+                    }
+                }
+
+                override fun onStartTrackingTouch(p0: SeekBar?) {
+                }
+
+                override fun onStopTrackingTouch(p0: SeekBar?) {
+                }
+
+            })
         }
     }
 
@@ -239,13 +310,28 @@ class ChatAdapter(private val context: Context) : RecyclerView.Adapter<RecyclerV
         }
     }
 
+    fun initializeSeekbar(seekBar: SeekBar, mediaPlayer: MediaPlayer) {
+        seekBar.max = mediaPlayer.duration
+        val handler = Handler()
+        handler.postDelayed(object : Runnable {
+            override fun run() {
+                try {
+                    seekBar.progress = mediaPlayer.currentPosition
+                    handler.postDelayed(this, 1000)
+                } catch (e: Exception) {
+                    seekBar.progress = 0
+                }
+            }
+
+        }, 0)
+    }
+
     fun setListener(onClickListener: OnClickListener) {
         mOnClickListener = onClickListener
     }
 
     interface OnClickListener {
         fun onVideoClick(playerView: PlayerView, message: Message)
-        fun onAudioClick(message: Message)
     }
 
     companion object {

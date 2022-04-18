@@ -6,6 +6,7 @@
         <entry key="..\:/android/socketio-chat-demo/app/src/main/res/drawable/bg_chat_audio.xml" value="0.219" />
         <entry key="..\:/android/socketio-chat-demo/app/src/main/res/drawable/bg_chat_audio_other.xml" value="0.219" />
         <entry key="..\:/android/socketio-chat-demo/app/src/main/res/drawable/ic_add.xml" value="0.219" />
+        <entry key="..\:/android/socketio-chat-demo/app/src/main/res/drawable/ic_pause.xml" value="0.101" />
         <entry key="..\:/android/socketio-chat-demo/app/src/main/res/drawable/ic_play.xml" value="0.219" />
         <entry key="..\:/android/socketio-chat-demo/app/src/main/res/layout/activity_main.xml" value="0.17395833333333333" />
         <entry key="..\:/android/socketio-chat-demo/app/src/main/res/layout/fragment_chat.xml" value="0.3484848484848485" />

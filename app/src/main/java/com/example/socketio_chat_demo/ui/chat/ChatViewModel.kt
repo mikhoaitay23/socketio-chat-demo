@@ -62,7 +62,6 @@ class ChatViewModel(private val application: Application, private val room: Room
 
     private val onStopTyping = Emitter.Listener {
         viewModelScope.launch {
-            val message = Message(room.userName, "stop typing", room.roomName, "typing")
             messageTypingLiveData.value = DataResponse.DataErrorResponse()
         }
     }

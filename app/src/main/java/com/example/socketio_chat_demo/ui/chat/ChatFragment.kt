@@ -29,9 +29,6 @@ class ChatFragment : BasePermissionRequestFragment<FragmentChatBinding>(), View.
     private val mExoPlayerUtils: ExoPlayerUtils by lazy {
         ExoPlayerUtils()
     }
-    private val mMediaPlayerUtils: MediaPlayerUtils by lazy {
-        MediaPlayerUtils()
-    }
 
     override fun getLayoutID() = R.layout.fragment_chat
 
@@ -67,15 +64,6 @@ class ChatFragment : BasePermissionRequestFragment<FragmentChatBinding>(), View.
             override fun onVideoClick(playerView: PlayerView, message: Message) {
                 val file = Utils.getMedia(requireContext(), message.messageContent, getString(R.string.video))
                 mExoPlayerUtils.initPlayer(requireContext(), playerView, Uri.fromFile(file).toString())
-            }
-
-            override fun onAudioClick(message: Message) {
-                if (mMediaPlayerUtils.isPlaying()){
-                    mMediaPlayerUtils.onPause()
-                } else {
-                    val file = Utils.getMedia(requireContext(), message.messageContent, getString(R.string.audio))
-                    mMediaPlayerUtils.onPlay(Uri.fromFile(file).toString())
-                }
             }
 
         })

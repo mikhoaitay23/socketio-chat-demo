@@ -35,4 +35,12 @@ class MediaPlayerUtils {
     fun isPlaying(): Boolean {
         return mMediaPlayer != null && mMediaPlayer!!.isPlaying
     }
+
+    fun getMediaPlayer(): MediaPlayer? {
+        return if (mMediaPlayer != null) {
+            mMediaPlayer
+        } else {
+            null
+        }
+    }
 }
